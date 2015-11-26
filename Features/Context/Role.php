@@ -186,17 +186,6 @@ class Role extends PlatformUI
     }
 
     /**
-     * @Then I should see a/an :label button
-     */
-    public function iSeeButton($label)
-    {
-        $element = $this->getElementByText($label, '.ez-button');
-        if (!$element) {
-            throw new \Exception("Button with label $label not found");
-        }
-    }
-
-    /**
      * @Then I see the following limitations fields:
      * @Then I should see a group with the Role Assigments:
      */

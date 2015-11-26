@@ -274,6 +274,17 @@ trait CommonActions
     }
 
     /**
+     * @Then I should see a/an :label button
+     */
+    public function iSeeButton($label)
+    {
+        $element = $this->getElementByText($label, '.ez-button');
+        if (!$element) {
+            throw new \Exception("Button with label $label not found");
+        }
+    }
+
+    /**
      * @Then I should see (an) element :element with (an) file :file
      */
     public function iSeeElementFile($element, $file)

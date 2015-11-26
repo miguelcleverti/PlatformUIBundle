@@ -95,6 +95,7 @@ class PlatformUI extends Context
     {
         parent::__construct();
         $this->pageIdentifierMap['roles'] = '/ez#/admin/pjax%2Frole';
+        $this->pageIdentifierMap['content types'] = '/ez#/admin/pjax%2Fcontenttype';
         $this->pageIdentifierMap['users'] = '/ez#/view/%2Fapi%2Fezp%2Fv2%2Fcontent%2Flocations%2F1%2F5/eng-GB';
         $this->platformUiUri = $uri;
         if ($user != null) {

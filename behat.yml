@@ -20,3 +20,7 @@ platformui:
         user:
             paths: [ vendor/ezsystems/platform-ui-bundle/Features/Users/users.feature ]
             contexts: [ EzSystems\PlatformUIBundle\Features\Context\Users ]
+        # content types features
+        contenttype:
+            paths: [ vendor/ezsystems/platform-ui-bundle/Features/ContentTypes/contenttypes.feature ]
+            contexts: [ EzSystems\PlatformUIBundle\Features\Context\ContentType ]
