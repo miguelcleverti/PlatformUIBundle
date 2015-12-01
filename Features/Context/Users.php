@@ -36,12 +36,21 @@ class Users extends PlatformUI
     }
 
     /**
+     * @Given I publish the new User
+     */
+    public function publishNewUser()
+    {
+        $this->clickEditActionBar('Publish');
+        $this->iDoNotSeeNotification('An error occured while publishing the draft');
+    }
+
+    /**
      * @When I edit user :username
      */
-    public function editUserUser($username)
+    public function editUser($username)
     {
         $this->clickOnTreePath("$username $username");
-        $this->sleep(); //safegaurd for application delays
+        $this->sleep(); //safeguard for application delays
         $this->waitWhileLoading();
         $this->clickActionBar('Edit');
     }
@@ -51,8 +60,19 @@ class Users extends PlatformUI
      */
     public function iSeeUsersPage()
     {
-        $this->sleep(); // safegaurd for application delays
+        $this->sleep(); // safeguard for application delays
         $this->iSeeTitle('Users');
+    }
+
+    /**
+     * @Then I should have a :user User
+     */
+    public function iShouldHaveUser($user)
+    {
+        $this->clickOnTreePath($user);
+        $this->sleep(); //safeguard for application delays
+        $this->waitWhileLoading();
+        $this->iSeeTitle($user);
     }
 
     /**

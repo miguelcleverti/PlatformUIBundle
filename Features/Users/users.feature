@@ -29,7 +29,8 @@ Feature: Use the eZ Users field
         When I fill a new User fields with:
             | First name | Last name | Login   | Email       | Password |
             | Ze         | Manel     | zemanel | ze@manel.pt | 12345    |
-        Then I should see no error messages
+        And I publish the new User
+        Then I should have a "Ze Manel" User
 
     @javascript @edge
     Scenario: Creating users with existing Login should raise an error notification
