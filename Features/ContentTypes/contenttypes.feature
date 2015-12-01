@@ -31,7 +31,7 @@ Feature: ContentType feature
         And I click at "Save" button
         Then I should see a "NewUserGroup" ContentType group
 
-    @javascript @now
+    @javascript
     Scenario: Edit existing ContentType group
         Given there is a Content Type Group with identifier "NewUserGroup"
         And I am on the "Content types" page
@@ -51,3 +51,19 @@ Feature: ContentType feature
         And I see the following ContentType fields:
             | ID | Name | Identifier | Modification date |
         And I should see a "Create a content type" button
+
+    @javascript
+    Scenario: Create ContentType form fields
+        Given I am on the "Content types" page
+        And I click in the "Content" Content type group
+        When I click at "Create a content type" button
+        And I fill form with:
+            | Field      | Value |
+            | Name       | Test  |
+            | Identifier | test  |
+        And I add a field type "Authors" with:
+            | Field      | Value  |
+            | Name       | Author |
+            | Identifier | author |
+        And I click at "OK" button
+        Then I should see "Test" text

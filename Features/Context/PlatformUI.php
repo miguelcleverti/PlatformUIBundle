@@ -311,6 +311,26 @@ class PlatformUI extends Context
     }
 
     /**
+     * Finds an HTML element using a css selector and if it contains some text value and returns it.
+     *
+     * @param string    $text           Text value of the element
+     * @param string    $selector       CSS selector of the element
+     * @return array
+     */
+    protected function getElementContainsText($text, $selector)
+    {
+        $elements = $this->findAllWithWait($selector);
+        foreach ($elements as $element) {
+            $elementText = $element->getText();
+            if (strpos($elementText, $text) !== false) {
+                return $element;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Finds an HTML element by class and the text value and clicks it.
      *
      * @param string    $text           Text value of the element

@@ -16,12 +16,13 @@ class ContentType extends PlatformUI
 {
 
     /**
-     * @Given i click in the :group Content type group
-     * @Then I should see a :group ContentType group
+     * @Given i click in the :name Content type group
+     * @Then I should see a :name ContentType group
+     * @Then I should see a :name ContentType
      */
-    public function iClickContentTypeGroup($group)
+    public function iClickContentTypeGroup($name)
     {
-        $this->clickElementByText($group, 'a');
+        $this->clickElementByText($name, 'a');
     }
 
     /**
@@ -33,7 +34,7 @@ class ContentType extends PlatformUI
         if ($groupElement) {
             $this->clickElementByText('Edit', 'a', null, $groupElement);
         } else {
-            throw new \Exception("Content type group $group nout found");
+            throw new \Exception("Content type group $group not found");
         }
     }
 
@@ -49,6 +50,24 @@ class ContentType extends PlatformUI
             if (!$element) {
                 throw new \Exception("Content type field $field not found");
             }
+        }
+    }
+
+    /**
+     * @Given I add a field type :field with:
+     */
+    public function iAddFieldType($type, TableNode $fields)
+    {
+        $elements = $this->findAllWithWait('.pure-control-group');
+        $element = $this->getElementContainsText('Field type selection', '.pure-control-group');
+        $select = $element->find('css', 'select');
+        $select->selectOption($type);
+        $this->clickElementByText('Add field definition', '.ez-button', null, $element);
+        $this->waitWhileLoading();
+        $internalName = $this->getFieldTypeManager()->getFieldTypeInternalIdentifier($type);
+        $formElement = $this->findWithWait(".field-type-$internalName");
+        foreach ($fields as $field) {
+            $formElement->fillField($field['Field'], $field['Value']);
         }
     }
 }
