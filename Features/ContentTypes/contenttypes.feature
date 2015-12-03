@@ -8,9 +8,9 @@ Feature: ContentType feature
     ##
     @javascript
     Scenario: Create ContentType form fields
-        When I am on the ContentTypes page
-        Then I should see "Content type groups" title
-        And I see the following ContentType group fields:
+        Given I am on the ContentTypes page
+        When I should see "Content type groups" title
+        Then I see the following ContentType group fields:
             | Name | ID |
         And I should see a "Create a Content type group" button
 
@@ -40,6 +40,23 @@ Feature: ContentType feature
         And I click at "Save" button
         Then I should see a "EditedUserGroup" ContentType group
 
+    @javascript
+    Scenario: Content type group using an existing content type group name
+        Given there is a Content Type Group with identifier "ExistingNameGroup"
+        And I am on the Content types page
+        When I click at the "Create a Content type group" link
+        And I fill in "Name" with "ExistingNameGroup"
+        Then I should see an error
+
+        #It is not possible to update a content type group using an existing content type group name
+        #Delete  content type group that has no content type
+        #It is not possible to delete content type groups that have defined content type
+
+        #It is not possible to create a content type using an existing content type name
+        #It is not possible to update a content type using an existing content type name
+        #Delete  content type that has no created content
+        #It is not possible to delete content type that has created contents
+
     ##
     # ContentTypes
     ##
@@ -52,7 +69,7 @@ Feature: ContentType feature
             | ID | Name | Identifier | Modification date |
         And I should see a "Create a content type" button
 
-    @javascript
+    @javascript @now
     Scenario: Create ContentType form fields
         Given I am on the "Content types" page
         And I click in the "Content" Content type group
@@ -66,4 +83,4 @@ Feature: ContentType feature
             | Name       | Author |
             | Identifier | author |
         And I click at "OK" button
-        Then I should see "Test" text
+        Then    I should see "Test" ContentType in "Content" type group

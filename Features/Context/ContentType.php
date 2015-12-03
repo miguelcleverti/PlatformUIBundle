@@ -26,34 +26,6 @@ class ContentType extends PlatformUI
     }
 
     /**
-     * @When I edit the :group Content type group
-     */
-    public function iEditContentTypeGroup($group)
-    {
-        $groupElement = $this->getElementByText($group, '.ez-selection-table tbody tr', 'a');
-        if ($groupElement) {
-            $this->clickElementByText('Edit', 'a', null, $groupElement);
-        } else {
-            throw new \Exception("Content type group $group not found");
-        }
-    }
-
-    /**
-     * @Then I see the following ContentType fields:
-     * @Then I see the following ContentType group fields:
-     */
-    public function iSeeContentTypeFields(TableNode $fields)
-    {
-        $fields = $fields->getRow(0);
-        foreach ($fields as $field) {
-            $element = $this->getElementByText($field, '.ez-selection-table th');
-            if (!$element) {
-                throw new \Exception("Content type field $field not found");
-            }
-        }
-    }
-
-    /**
      * @Given I add a field type :field with:
      */
     public function iAddFieldType($type, TableNode $fields)
@@ -68,6 +40,47 @@ class ContentType extends PlatformUI
         $formElement = $this->findWithWait(".field-type-$internalName");
         foreach ($fields as $field) {
             $formElement->fillField($field['Field'], $field['Value']);
+        }
+    }
+
+    /**
+     * @When I edit the :group Content type group
+     */
+    public function iEditContentTypeGroup($group)
+    {
+        $groupElement = $this->getElementByText($group, '.ez-selection-table tbody tr', 'a');
+        if ($groupElement) {
+            $this->clickElementByText('Edit', 'a', null, $groupElement);
+        } else {
+            throw new \Exception("Content type group $group not found");
+        }
+    }
+
+    /**
+     * @Then I should see :name ContentType in :group type group
+     */
+    public function iSeeContentTypeInGroup($name, $group)
+    {
+        $this->iAmOnPage('Content types');
+        $this->waitWhileLoading();
+        $this->iClickContentTypeGroup($group);
+        $this->waitWhileLoading();
+        $this->iClickContentTypeGroup($name);
+
+    }
+
+    /**
+     * @Then I see the following ContentType fields:
+     * @Then I see the following ContentType group fields:
+     */
+    public function iSeeContentTypeFields(TableNode $fields)
+    {
+        $fields = $fields->getRow(0);
+        foreach ($fields as $field) {
+            $element = $this->getElementByText($field, '.ez-selection-table th');
+            if (!$element) {
+                throw new \Exception("Content type field $field not found");
+            }
         }
     }
 }
