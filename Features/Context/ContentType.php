@@ -17,6 +17,7 @@ class ContentType extends PlatformUI
 
     /**
      * @Given i click in the :name Content type group
+     * @Given i click in the :name Content type
      * @Then I should see a :name ContentType group
      * @Then I should see a :name ContentType
      */
@@ -57,6 +58,19 @@ class ContentType extends PlatformUI
     }
 
     /**
+     * @When I delete the :group Content type group
+     */
+    public function iDeleteContentTypeGroup($group)
+    {
+        $groupElement = $this->getElementByText($group, '.ez-selection-table tbody tr', 'a');
+        if ($groupElement) {
+            $this->clickElementByText('Delete', 'button', null, $groupElement);
+        } else {
+            throw new \Exception("Content type group $group not found");
+        }
+    }
+
+    /**
      * @Then I should see :name ContentType in :group type group
      */
     public function iSeeContentTypeInGroup($name, $group)
@@ -83,4 +97,7 @@ class ContentType extends PlatformUI
             }
         }
     }
+    /**
+     * @Then I should see a name already exists error
+     */
 }

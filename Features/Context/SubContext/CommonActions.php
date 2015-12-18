@@ -9,6 +9,8 @@
  */
 namespace EzSystems\PlatformUIBundle\Features\Context\SubContext;
 
+use Behat\Gherkin\Node\TableNode;
+
 trait CommonActions
 {
     /**
@@ -136,9 +138,9 @@ trait CommonActions
      */
     public function iCreateContentType($type, TableNode $fields)
     {
-        $this->clickNavigationZone('Platform');
+        $this->clickNavigationZone('Content');
         $this->iClickAtLink('Content structure');
-        $this->clickActionBar('Create a content');
+        $this->clickActionBar('Create');
         $this->clickContentType($type);
         foreach ($fields as $fieldArray) {
             $keys = array_keys($fieldArray);
@@ -258,6 +260,34 @@ trait CommonActions
             return;
         }
         throw new \Exception("Unexpected notification shown with message '$message'");
+    }
+
+    /**
+     * @Then I should see an error notification
+     */
+    public function iSeeErrors()
+    {
+        $notifications = $this->findWithWait('.ez-view-notificationhubview');
+        if ($notifications) {
+            $error = $notifications->find('css', '.is-state-error');
+            if (!$error) {
+                throw new \Exception('Error notification not found');
+            }
+        }
+    }
+
+    /**
+     * @Then I should not see an error notification
+     */
+    public function iDoNotSeeErrors()
+    {
+        $notifications = $this->findWithWait('.ez-view-notificationhubview');
+        if ($notifications) {
+            $error = $notifications->find('css', '.is-state-error');
+            if ($error) {
+                throw new \Exception('Error notification found');
+            }
+        }
     }
 
     /**
