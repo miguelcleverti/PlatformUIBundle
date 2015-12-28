@@ -9,6 +9,8 @@
  */
 namespace EzSystems\PlatformUIBundle\Features\Context\SubContext;
 
+use Behat\Gherkin\Node\TableNode;
+
 trait CommonActions
 {
     /**
@@ -289,7 +291,21 @@ trait CommonActions
     }
 
     /**
-     * @Then /^I should be on the dashboard$/
+     * @Then I see the following limitations fields:
+     */
+    public function iSeeLimitationFields(TableNode $limitations)
+    {
+        $limitations = $limitations->getRow(0);
+        foreach ($limitations as $limitation) {
+            $element = $this->getElementByText($limitation, '.ez-selection-table th');
+            if (!$element) {
+                throw new \Exception("Limitation $limitation not found");
+            }
+        }
+    }
+
+    /**
+     * @Then I should be on the dashboard
      */
     public function iShouldBeOnTheDashboard()
     {
@@ -297,7 +313,7 @@ trait CommonActions
     }
 
     /**
-     * @Given /^I am redirected to a location view$/
+     * @Given I am redirected to a location view
      */
     public function iHaveBeenRedirectedToALocationView()
     {

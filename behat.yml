@@ -20,3 +20,7 @@ platformui:
         user:
             paths: [ vendor/ezsystems/platform-ui-bundle/Features/Users/users.feature ]
             contexts: [ EzSystems\PlatformUIBundle\Features\Context\Users ]
+        # languages features
+        languages:
+            paths: [ vendor/ezsystems/platform-ui-bundle/Features/Languages/languages.feature ]
+            contexts: [ EzSystems\PlatformUIBundle\Features\Context\Languages ]

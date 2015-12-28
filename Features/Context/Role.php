@@ -197,17 +197,10 @@ class Role extends PlatformUI
     }
 
     /**
-     * @Then I see the following limitations fields:
      * @Then I should see a group with the Role Assigments:
      */
-    public function iSeeLimitationFields(TableNode $limitations)
+    public function iSeeGroupWithRoleAssigments(TableNode $assigments)
     {
-        $limitations = $limitations->getRow(0);
-        foreach ($limitations as $limitation) {
-            $element = $this->getElementByText($limitation, '.ez-selection-table th');
-            if (!$element) {
-                throw new \Exception("Limitation $limitation not found");
-            }
-        }
+        $this->iSeeLimitationFields($assigments);
     }
 }

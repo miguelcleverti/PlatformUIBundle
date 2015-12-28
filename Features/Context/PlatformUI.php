@@ -96,6 +96,7 @@ class PlatformUI extends Context
         parent::__construct();
         $this->pageIdentifierMap['roles'] = '/ez#/admin/pjax%2Frole';
         $this->pageIdentifierMap['users'] = '/ez#/view/%2Fapi%2Fezp%2Fv2%2Fcontent%2Flocations%2F1%2F5/eng-GB';
+        $this->pageIdentifierMap['languages'] = "/ez#/admin/pjax%2Flanguage%2Flist";
         $this->platformUiUri = $uri;
         if ($user != null) {
             $this->user = $user;
@@ -327,6 +328,26 @@ class PlatformUI extends Context
         } else {
             throw new \Exception("Can't click '$text' element: not Found");
         }
+    }
+
+    /**
+     * Finds an HTML element using a css selector and if it contains some text value and returns it.
+     *
+     * @param string    $text           Text value of the element
+     * @param string    $selector       CSS selector of the element
+     * @return array
+     */
+    protected function getElementContainsText($text, $selector)
+    {
+        $elements = $this->findAllWithWait($selector);
+        foreach ($elements as $element) {
+            $elementText = $element->getText();
+            if (strpos($elementText, $text) !== false) {
+                return $element;
+            }
+        }
+
+        return false;
     }
 
     /**
