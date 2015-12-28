@@ -168,3 +168,48 @@ Feature: Create, delete, update and View the Role UI
     When I delete the "Organizers" role
     Then the Role "Organizers" is successfully deleted
     And I see that an "Organizers" role does not exists
+
+   ##
+   #
+   # Policies
+   #
+   ##
+   @javascript
+   Scenario: Add a new policy
+     Given I am logged in as admin on PlatformUI
+     And a "Cenas" role exists
+     And I click on the navigation zone "Admin Panel"
+     And I click on the navigation item "Roles"
+     And I click on xpto "Cenas" link
+     And I click on xpto "Add a new policy" link
+     And I select "User / Activation"
+     And I click on xpto "Save and add limitations" button
+     When I click on xpto "Save" button
+     Then I verify the policy exists module "user" function "activation"
+
+
+  @javascript
+  Scenario: Edit a policy limitations
+    Given a "Main" role exists
+    And a policy with "content" and "diff" of "Main" exists
+    And I am logged in as admin on PlatformUI
+    And I click on the navigation zone "Admin Panel"
+    And I click on the navigation item "Roles"
+    And I click on xpto "Main" link
+    And I click on edit limitations of module "content" and function "diff"
+    And I select "Image" of "ContentType"
+    When I click on xpto "Save" button
+    Then I see on module "content" and function "diff" the limitation "Class( 5 )"
+#    problem running this scenario because of platform ui error refering to edit limitations
+
+
+  @javascript
+  Scenario: Remove a policy
+    Given a "Main" role exists
+    And a policy with "user" and "activation" of "Main" exists
+    And I am logged in as admin on PlatformUI
+    And I click on the navigation zone "Admin Panel"
+    And I click on the navigation item "Roles"
+    And I click on xpto "Main" link
+    When I click on remove policy with module "user" and function "activation"
+    Then I don't see the policy with module "user" and function "activation"

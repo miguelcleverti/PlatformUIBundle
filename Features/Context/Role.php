@@ -210,4 +210,136 @@ class Role extends PlatformUI
             }
         }
     }
+
+    /**
+     * @Given a policy with :module and :function of :roleIdentifier exists
+     * @param $roleIdentifier
+     * @param $module
+     * @param $function
+     */
+    public function createPolicy($roleIdentifier, $module, $function)
+    {
+        $repository = $this->getRepository();
+        $repository->sudo(
+            function () use ($repository, $roleIdentifier, $module, $function) {
+                $roleService = $repository->getRoleService();
+                $role = $roleService->loadRoleByIdentifier($roleIdentifier);
+
+                $policyCreateSctruct = $roleService->newPolicyCreateStruct($module, $function);
+                $roleDraft = $roleService->createRoleDraft($role);
+
+                $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateSctruct);
+                $roleService->publishRoleDraft($roleDraft);
+            }
+        );
+    }
+
+    /**
+     * @When I click on edit limitations of module :module and function :function
+     * @param $module
+     * @param $function
+     */
+    public function clickEditLimitations($module, $function)
+    {
+        $row = $this->verifyPolicyExists($module, $function);
+        $columnList = $this->findAllWithWait('td', $row);
+        foreach ($columnList as $column) {
+            if ($column->getText() == 'Edit limitations') {
+                $column->click();
+            }
+        }
+    }
+
+    /**
+     * @When I click on remove policy with module :module and function :function
+     */
+    public function clickRemoveLimitation($module, $function)
+    {
+        $row = $this->verifyPolicyExists($module, $function);
+        $deleteButton = $this->findWithWait('.ez-button-delete', $row);
+        $deleteButton->click();
+        $this->waitWhileLoading();
+
+    }
+
+    /**
+     * @When I select :option of :limitation
+     * @param $option
+     * @param $limitation
+     */
+    public function selectOptionFromLabel($option, $limitation)
+    {
+        $limitationTables = $this->findAllWithWait('.pure-control-group');
+        foreach ($limitationTables as $table) {
+            $label = $this->findWithWait('label', $table);
+            if ($label->getText() == $limitation) {
+                $select = $this->findWithWait('select', $table);
+                $desiredOption = $this->getElementByText($option, 'option', null, $select);
+                if ($desiredOption) {
+                    $desiredOption->click();
+                }
+            }
+        }
+    }
+
+    /**
+     * @Then I verify the policy exists module :module function :function
+     */
+    public function verifyPolicyExists($module, $function)
+    {
+        $table = $this->findAllWithWait('.ez-selection-table tbody tr');
+        foreach ($table as $row) {
+            $modulePolicy = $this->getElementByText($module, 'td', null, $row);
+            $functionPolicy = $this->getElementByText($function, 'td', null, $row);
+            if ($modulePolicy && $functionPolicy) {
+                $selectedRow = $row;
+            }
+        }
+
+        return $selectedRow;
+    }
+
+    /**
+     * @Then I don't see the policy with module :module and function :function
+     * @param $module
+     * @param $function
+     * @throws \Exception
+     */
+    public function iDontSeePolicy($module, $function)
+    {
+        $table = $this->findAllWithWait('.ez-selection-table tbody tr');
+        $state = false;
+        foreach ($table as $row) {
+            $modulePolicy = $this->getElementByText($module, 'td', null, $row);
+            $functionPolicy = $this->getElementByText($function, 'td', null, $row);
+            if ($modulePolicy && $functionPolicy) {
+                $state = true;
+            }
+        }
+        if ($state) {
+            throw new \Exception("Policy '$module' '$function' exists");
+        }
+    }
+
+
+    /**
+     * @Then I see on module :module and function :function the limitation :editedLimitation
+     */
+    public function iSeeLimitation($editedLimitation)
+    {
+        $table = $this->findAllWithWait('.ez-selection-table tbody tr');
+        $state = false;
+        foreach ($table as $row) {
+            $limitation = $this->getElementByText($editedLimitation, 'td', null, $row);
+//            var_dump($limitation->getText());
+            if ($limitation) {
+                $state = true;
+                var_dump($limitation->getText());
+                var_dump("está correcto!");
+            }
+        }
+        if (!$state) {
+            throw new \Exception("Limitation didn't change");
+        }
+    }
 }
