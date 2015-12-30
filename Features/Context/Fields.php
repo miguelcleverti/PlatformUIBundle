@@ -90,6 +90,8 @@ class Fields extends PlatformUI
         $this->clickNavigationZone('Content');
         $this->clickNavigationItem('Content structure');
         $this->clickOnTreePath($name);
+        // wait for content loading
+        $this->waitWhileLoading();
         $this->clickActionBar('Edit');
         $this->platformStatus = self::WAITING_FOR_PUBLISHING;
         // assert
