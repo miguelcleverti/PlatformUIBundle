@@ -40,6 +40,11 @@ class Authentication extends PlatformUI
     protected $roleService;
 
     /**
+     * @var EzSystems\PlatformUIBundle\Features\Context\SubContext\BrowserContext
+     */
+    protected $browserContext;
+
+    /**
      * @injectService $repository @ezpublish.api.repository
      * @injectService $userService @ezpublish.api.service.user
      * @injectService $roleService @ezpublish.api.service.role
@@ -117,8 +122,8 @@ class Authentication extends PlatformUI
     {
         $this->goToPlatformUi();
         $this->waitWhileLoading();
-        $this->fillFieldWithValue('username', $username);
-        $this->fillFieldWithValue('password', $password);
+        $this->browserContext->fillFieldWithValue('username', $username);
+        $this->browserContext->fillFieldWithValue('password', $password);
         $this->clickElementByText('Login', ['ez-loginform-button']);
         $this->iShouldBeLoggedIn();
     }

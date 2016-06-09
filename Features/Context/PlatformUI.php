@@ -144,43 +144,6 @@ class PlatformUI extends RawMinkContext
         $this->waitWhileLoading();
     }
 
-    public function fillFieldWithValue($field, $value = '')
-    {
-        $fieldNode = $this->spin(
-            function () use ($field) {
-                $fieldNode = $this->getSession()->getPage()->findField($field);
-                if ($fieldNode == null) {
-                    throw new \Exception('Field not found');
-                }
-
-                return $fieldNode;
-            }
-        );
-
-        $this->spin(
-            function () use ($fieldNode, $field, $value) {
-                // make sure any autofocus elements don't mis-behave when setting value
-                $fieldNode->blur();
-                usleep(10 * 1000);
-                $fieldNode->focus();
-                usleep(10 * 1000);
-
-                // setting value on pre-filled inputs can cause issues, clearing before
-                $fieldNode->setValue('');
-                $fieldNode->setValue($value);
-
-                // verication that the field was really filled in correctly
-                $this->sleep();
-                $check = $this->getSession()->getPage()->findField($field)->getValue();
-                if ($check != $value) {
-                    throw new \Exception('Failed to set the field value: ' . $check);
-                }
-
-                return true;
-            }
-        );
-    }
-
     /**
      * Setter for the new path of the content name.
      */

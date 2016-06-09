@@ -18,7 +18,7 @@ class Fields extends PlatformUI
     const NOTIFICATION_PUBLISH_ERROR = 'An error occured while publishing the draft';
 
     /**
-     * @var EzSystems\PlatformBehatBundle\Context\Object\FieldTypeContext
+     * @var eZ\Bundle\EzPublishCoreBundle\Features\Context\FieldTypeContext
      */
     protected $fieldtypeContext;
 
@@ -26,6 +26,11 @@ class Fields extends PlatformUI
      * @var EzSystems\PlatformUIBundle\Features\Context\SubContext\DashboardContext
      */
     protected $dashboardContext;
+
+    /**
+     * @var EzSystems\PlatformUIBundle\Features\Context\SubContext\BrowserContext
+     */
+    protected $browserContext;
 
     protected function getFieldIdentCss($identifier, $contentId = '')
     {
@@ -109,7 +114,7 @@ class Fields extends PlatformUI
      */
     public function setFieldValue($value)
     {
-        $this->fillFieldWithValue($this->getThisFieldIdent(), $value);
+        $this->browserContext->fillFieldWithValue($this->getThisFieldIdent(), $value);
     }
 
     /**
