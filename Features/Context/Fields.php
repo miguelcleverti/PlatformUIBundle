@@ -101,8 +101,11 @@ class Fields extends PlatformUI
 
         $this->dashboardContext->clickNavigationZone('Content');
         $this->dashboardContext->clickNavigationItem('Content structure');
+        $this->waitWhileLoading();
         $this->dashboardContext->clickOnTreePath($name);
+        $this->waitWhileLoading();
         $this->dashboardContext->clickActionBar('Edit');
+        $this->waitWhileLoading();
         $this->platformStatus = self::WAITING_FOR_PUBLISHING;
         // assert
         $this->iSeeContentEditView();
@@ -238,6 +241,7 @@ class Fields extends PlatformUI
 
         $this->dashboardContext->clickNavigationZone('Content');
         $this->dashboardContext->clickNavigationItem('Content structure');
+        $this->waitWhileLoading();
         $this->dashboardContext->clickOnTreePath($name);
     }
 
