@@ -49,7 +49,7 @@ class Role extends PlatformUI
      */
     public function createRole()
     {
-        $this->clickElementByText('Create a role', '.ez-button');
+        $this->clickElementByText('Create a role', ['ez-button']);
         $this->waitWhileLoading();
     }
 
@@ -58,7 +58,7 @@ class Role extends PlatformUI
      */
     public function clickRoles()
     {
-        $this->clickElementByText('Roles', 'li a');
+        $this->clickElementByText('Roles', ['ez-navigation-item']);
         $this->waitWhileLoading();
     }
 
@@ -67,24 +67,9 @@ class Role extends PlatformUI
      */
     public function iEditRole($name)
     {
-        $elements = $this->findAllWithWait('.ez-role');
-        if (!$elements) {
-            throw new \Exception('No roles found');
-        }
-        foreach ($elements as $element) {
-            $foundName = $this->getElementByText($name, '.ez-role-name', null, $element);
-            if ($foundName) {
-                $button = $this->getElementByText('Edit role name', '.ez-button', null, $element);
-                if (!$button) {
-                    throw new \Exception("Role name edit button not found for '$name'");
-                }
-                $button->click();
-                break;
-            }
-        }
-        if (!$foundName) {
-            throw new \Exception("Role $name not found");
-        }
+        $xpath = "//*[contains(concat(' ', normalize-space(@class), ' '), ' ez-role ') and descendant-or-self::*//text()='$name']//*[contains(concat(' ', normalize-space(@class), ' '), ' ez-button ') and descendant-or-self::*//text()='Edit role name']";
+        $element = $this->findElementXpath($xpath, $name);
+        $element->click();
     }
 
     /**
@@ -93,7 +78,7 @@ class Role extends PlatformUI
     public function roleDetailsView($role)
     {
         $this->onRolesUI();
-        $this->clickElementByText($role, '.ez-role-name a');
+        $this->clickElementByText($role, ['ez-role-name']);
     }
 
     /**
@@ -109,8 +94,8 @@ class Role extends PlatformUI
      */
     public function deleteRole($name)
     {
-        $this->clickElementByText($name, '.ez-role-name a');
-        $this->clickElementByText('Delete', '.ez-button');
+        $this->clickElementByText($name, ['ez-role-name']);
+        $this->clickElementByText('Delete', ['ez-button']);
     }
 
     /**
@@ -118,7 +103,7 @@ class Role extends PlatformUI
      */
     public function noPoliciesForThisRole()
     {
-        $this->getElementByText('There are no policies set up for this role.', 'tr td');
+        $this->getElementByText('There are no policies set up for this role.');
     }
 
     /**
@@ -126,7 +111,7 @@ class Role extends PlatformUI
      */
     public function noAssigmentsForThisRole()
     {
-        $this->getElementByText('This role is not assigned to any users or user groups.', 'tr td');
+        $this->getElementByText('This role is not assigned to any users or user groups.');
     }
 
     /**
@@ -143,9 +128,14 @@ class Role extends PlatformUI
      */
     public function roleWasNotPublished($name)
     {
-        $element = $this->getElementByText($name, '.ez-role-name');
-        if ($element) {
-            throw new \Exception('Role was found');
+        $found = true;
+        try {
+            $element = $this->getElementByText($name, ['ez-role-name']);
+        } catch (\Exception $e) {
+            $found = false;
+        }
+        if ($found) {
+            throw new \Exception("Role '$name' was found in the page");
         }
     }
 
@@ -156,12 +146,8 @@ class Role extends PlatformUI
     {
         $this->dashboardContext->iSeeNotification('Form did not validate. Please review errors below.');
         $element = $this->getElementByText(
-            'Identifier "' . $name . '" already exists. Role identifier must be unique.',
-            'li'
+            'Identifier "' . $name . '" already exists. Role identifier must be unique.'
         );
-        if (!$element) {
-            throw new \Exception('Error message not found');
-        }
     }
 
     /**
@@ -185,25 +171,10 @@ class Role extends PlatformUI
      */
     public function iSeeRolesList(TableNode $roles, $button)
     {
-        $elements = $this->findAllWithWait('.ez-role');
-        if (!$elements) {
-            throw new \Exception('No roles found');
-        }
         foreach ($roles as $role) {
             $name = $role['Name'];
-            foreach ($elements as $element) {
-                $foundName = $this->getElementByText($name, '.ez-role-name', null, $element);
-                $foundButton = $this->getElementByText($button, '.ez-button', null, $element);
-                if ($foundName) {
-                    break;
-                }
-            }
-            if (!$foundName) {
-                throw new \Exception("Role $name not found");
-            }
-            if (!$foundButton) {
-                throw new \Exception("Role $name does not have a $button button");
-            }
+                $foundName = $this->getElementByText($name, ['ez-role-name']);
+                $foundButton = $this->getElementByText($button, ['ez-button']);
         }
     }
 
@@ -212,10 +183,7 @@ class Role extends PlatformUI
      */
     public function iSeeButton($label)
     {
-        $element = $this->getElementByText($label, '.ez-button');
-        if (!$element) {
-            throw new \Exception("Button with label $label not found");
-        }
+        $element = $this->getElementByText($label, ['ez-button']);
     }
 
     /**
@@ -226,10 +194,7 @@ class Role extends PlatformUI
     {
         $limitations = $limitations->getRow(0);
         foreach ($limitations as $limitation) {
-            $element = $this->getElementByText($limitation, '.ez-selection-table th');
-            if (!$element) {
-                throw new \Exception("Limitation $limitation not found");
-            }
+            $element = $this->getElementByText($limitation);
         }
     }
 }

@@ -32,7 +32,7 @@ class DashboardContext extends PlatformUI
      */
     public function clickNavigationZone($zone)
     {
-        $this->clickElementByText($zone, '.ez-zone-name');
+        $this->clickElementByText($zone, ['ez-zone-name']);
         $this->waitWhileLoading();
         // Clicking navigation zone triggers load of first item,
         // we must wait before interacting with the page (see EZP-25128)
@@ -48,7 +48,7 @@ class DashboardContext extends PlatformUI
      */
     public function clickNavigationItem($item)
     {
-        $this->clickElementByText($item, '.ez-navigation-item');
+        $this->clickElementByText($item, ['ez-navigation-item']);
         $this->waitWhileLoading();
     }
 
@@ -60,7 +60,7 @@ class DashboardContext extends PlatformUI
      */
     public function clickDiscoveryBar($button)
     {
-        $this->clickElementByText($button, '.ez-view-discoverybarview .ez-action', '.action-label');
+        $this->clickElementByText($button, ['ez-view-discoverybarview', 'ez-action'], 'action-label');
         $this->waitWhileLoading();
     }
 
@@ -72,7 +72,7 @@ class DashboardContext extends PlatformUI
      */
     public function clickActionBar($button)
     {
-        $this->clickElementByText($button, '.ez-actionbar-container .ez-action', '.action-label');
+        $this->clickElementByText($button, ['ez-actionbar-container', 'ez-action'], '.action-label');
         $this->waitWhileLoading();
     }
 
@@ -84,7 +84,7 @@ class DashboardContext extends PlatformUI
      */
     public function clickEditActionBar($button)
     {
-        $this->clickElementByText($button, '.ez-editactionbar-container .ez-action', '.action-label');
+        $this->clickElementByText($button, ['ez-editactionbar-container', 'ez-action'], '.action-label');
         $this->waitWhileLoading();
     }
 
@@ -110,7 +110,7 @@ class DashboardContext extends PlatformUI
      */
     public function clickContentType($contentType)
     {
-        $this->clickElementByText($contentType, '.ez-contenttypeselector-types .ez-selection-filter-item ');
+        $this->clickElementByText($contentType, ['ez-contenttypeselector-types', 'ez-selection-filter-item']);
         $this->waitWhileLoading();
     }
 
@@ -155,7 +155,7 @@ class DashboardContext extends PlatformUI
      */
     public function confirmSelection()
     {
-        $this->clickElementByText('Confirm selection', '.ez-universaldiscovery-confirm');
+        $this->clickElementByText('Confirm selection', ['ez-universaldiscovery-confirm']);
     }
 
     /**
@@ -164,7 +164,7 @@ class DashboardContext extends PlatformUI
     public function iSeeNotification($message)
     {
         $this->sleep();
-        $result = $this->getElementByText($message, '.ez-notification-text');
+        $result = $this->getElementByText($message, ['ez-notification-text']);
         if (!$result) {
             throw new \Exception("The notification with message '$message' was not shown");
         }

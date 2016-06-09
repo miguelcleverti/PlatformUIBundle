@@ -119,7 +119,7 @@ class Authentication extends PlatformUI
         $this->waitWhileLoading();
         $this->fillFieldWithValue('username', $username);
         $this->fillFieldWithValue('password', $password);
-        $this->clickElementByText('Login', 'button');
+        $this->clickElementByText('Login', ['ez-loginform-button']);
         $this->iShouldBeLoggedIn();
     }
 
@@ -152,7 +152,7 @@ class Authentication extends PlatformUI
         $this->waitWhileLoading();
         $el->click();
         $this->waitWhileLoading();
-        $this->clickElementByText('Logout', 'a');
+        $this->clickElementByText('Logout', ['ez-user-menu-item']);
     }
 
     /**

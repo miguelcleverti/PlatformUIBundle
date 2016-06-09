@@ -47,7 +47,8 @@ class BrowserContext extends PlatformUI
      */
     public function clickLink($link)
     {
-        $this->clickElementByText($link, 'a');
+        //TODO click link
+        $this->clickElementByText($link);
     }
 
     /**
@@ -56,9 +57,10 @@ class BrowserContext extends PlatformUI
      *
      * Clicks the button identified by ':button'
      */
-    public function iClickAtButton($button)
+    public function clickButton($button)
     {
-        $this->clickElementByText($button, 'button');
+        //TODO click button
+        $this->clickElementByText($button);
     }
 
     /**

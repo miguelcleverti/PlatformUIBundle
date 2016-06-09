@@ -27,8 +27,7 @@ class ContentActions extends PlatformUI
      */
     private function iSeeNotification($message)
     {
-        $this->sleep();
-        $result = $this->getElementByText($message, '.ez-notification-text');
+        $result = $this->getElementByText($message, ['ez-notification-text']);
         Assertion::AssertNotNull($result);
     }
 
@@ -91,7 +90,7 @@ class ContentActions extends PlatformUI
      */
     public function confirmRemoval()
     {
-        $this->clickElementByText('Confirm', '.ez-confirmbox-confirm');
+        $this->clickElementByText('Confirm', ['ez-confirmbox-confirm']);
     }
 
     /**
@@ -100,7 +99,7 @@ class ContentActions extends PlatformUI
      */
     public function cancelRemoval()
     {
-        $this->clickElementByText('Cancel', '.ez-confirmbox-cancel');
+        $this->clickElementByText('Cancel', ['ez-confirmbox-cancel']);
     }
 
     /**
@@ -110,7 +109,7 @@ class ContentActions extends PlatformUI
     {
         $element = $this->getElementByText(
             'Are you sure you want to send this content to trash?',
-            '.ez-confirmbox-title'
+            ['ez-confirmbox-title']
         );
         if (!$element) {
             throw new \Exception('Confirmation box not found');
@@ -122,7 +121,7 @@ class ContentActions extends PlatformUI
      */
     public function iSeeConfirmation()
     {
-        $element = $this->getElementByText('Confirm', '.ez-confirmbox-confirm');
+        $element = $this->getElementByText('Confirm', ['ez-confirmbox-confirm']);
         if (!$element) {
             throw new \Exception('Confirmation button not found');
         }
@@ -133,7 +132,7 @@ class ContentActions extends PlatformUI
      */
     public function iSeeCancel()
     {
-        $element = $this->getElementByText('Cancel', '.ez-confirmbox-cancel');
+        $element = $this->getElementByText('Cancel', ['ez-confirmbox-cancel']);
         if (!$element) {
             throw new \Exception('Cancel button not found');
         }

@@ -321,34 +321,49 @@ class PlatformUI extends RawMinkContext
         return $element;
     }
 
-    /**
-     * Finds an HTML element by class and the text value and returns it.
-     *
-     * @param string    $text           Text value of the element
-     * @param string    $selector       CSS selector of the element
-     * @param string    $textSelector   Extra CSS selector for text of the element
-     * @param string    $baseElement    Element in which the search is based
-     *
-     * @return array
-     */
-    protected function getElementByText($text, $selector, $textSelector = null, $baseElement = null)
+    protected function getElementByText($text, array $selectors = [], $baseElement = null)
     {
-        if ($baseElement == null) {
-            $baseElement = $this->getSession()->getPage();
-        }
-        $elements = $this->findAllWithWait($selector, $baseElement);
-        foreach ($elements as $element) {
-            if ($textSelector != null) {
-                $elementText = $this->findWithWait($textSelector, $element)->getText();
-            } else {
-                $elementText = $element->getText();
+        $xpath = '';
+
+        if (!empty($selectors)) {
+            foreach ($selectors as $selector) {
+                $xpath .= "//*[contains(concat(' ', normalize-space(@class), ' '), ' $selector ')]";
             }
-            if ($elementText == $text) {
-                return $element;
-            }
+            $xpath = rtrim($xpath, ']');
+            $xpath .= "and descendant-or-self::*//text()='$text']";
+        } else {
+            $xpath = "//*[text()='$text']";
         }
 
-        return false;
+        $element = $this->findElementXpath($xpath, $text, $baseElement);
+
+        return $element;
+    }
+
+    protected function findElementXpath($xpath, $exceptionText, $baseElement = null)
+    {
+        if (!$baseElement) {
+            $baseElement = $this->getSession()->getPage();
+        }
+
+        $element = $this->spin(
+            function () use ($xpath, $baseElement, $exceptionText) {
+                $element = $baseElement->find('xpath', $xpath);
+                if (!$element) {
+                    throw new \Exception("Element with text '$exceptionText' was not found");
+                }
+                // An exception may be thrown if the element is not valid/attached to DOM.
+                $element->getValue();
+
+                if (!$element->isVisible()) {
+                    throw new \Exception("Element with text '$exceptionText' is not visible");
+                }
+
+                return $element;
+            }
+        );
+
+        return $element;
     }
 
     /**
@@ -359,15 +374,13 @@ class PlatformUI extends RawMinkContext
      * @param string    $textSelector   Extra CSS selector for text of the element
      * @param string    $baseElement    Element in which the search is based
      */
-    protected function clickElementByText($text, $selector, $textSelector = null, $baseElement = null, $index = 1)
+    protected function clickElementByText($text, array $selector = [])
     {
-        $element = $this->getElementByText($text, $selector, $textSelector, $baseElement);
-        if ($element && $element->isVisible()) {
+        $element = $this->getElementByText($text, $selector);
+        if ($element->isVisible()) {
             $element->click();
-        } elseif ($element) {
-            throw new \Exception("Can't click '$text' element: not visible");
         } else {
-            throw new \Exception("Can't click '$text' element: not Found");
+            throw new \Exception("Can't click '$text' element not visible");
         }
     }
 
@@ -396,7 +409,7 @@ class PlatformUI extends RawMinkContext
             }
         }
         // find an '.ez-tree-node' element which contains an '.ez-tree-navigate' with text '$text'
-        $element = $this->getElementByText($text, '.ez-tree-node', '.ez-tree-navigate', $parentNode);
+        $element = $this->getElementByText($text, ['ez-tree-node'], $parentNode);
         if (!$element) {
             throw new \Exception("The tree node '$text' was not found");
         }

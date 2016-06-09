@@ -98,7 +98,7 @@ class ContentEditContext extends PlatformUI
         foreach ($elements as $element) {
             $found = false;
             $name = array_values($element)[0];
-            $found = $this->getElementByText($name, '.ez-selection-filter-item');
+            $found = $this->getElementByText($name, ['ez-selection-filter-item']);
             Assertion::assertNotNull($found, "Element: $name not found");
         }
     }

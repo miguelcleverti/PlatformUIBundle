@@ -84,7 +84,7 @@ class Users extends PlatformUI
     {
         foreach ($users as $user) {
             $name = $user['Name'];
-            $element = $this->getElementByText($name, '.ez-subitemlist-table td');
+            $element = $this->getElementByText($name, ['ez-subitemlist-table']);
             if (!$element) {
                 throw new \Exception("User not found $name");
             }
@@ -98,7 +98,7 @@ class Users extends PlatformUI
     {
         foreach ($tabs as $tab) {
             $label = $tab['Tabs'];
-            $element = $this->getElementByText($label, '.ez-tabs-label');
+            $element = $this->getElementByText($label, ['ez-tabs-label']);
             if (!$element) {
                 throw new \Exception("Tab with $label not found");
             }
