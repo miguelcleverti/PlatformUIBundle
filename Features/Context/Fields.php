@@ -10,7 +10,7 @@
 namespace EzSystems\PlatformUIBundle\Features\Context;
 
 use Behat\Mink\WebAssert;
-use EzSystems\PlatformBehatBundle\Context\Object\FieldTypeContext as FieldType;
+use eZ\Bundle\EzPublishCoreBundle\Features\Context\FieldTypeContext as FieldType;
 
 class Fields extends PlatformUI
 {
