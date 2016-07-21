@@ -352,7 +352,7 @@ class PlatformUI extends Context
             }
         }
         // find an '.ez-tree-node' element which contains an '.ez-tree-navigate' with text '$text'
-        $element = $this->getElementByText($text, '.ez-tree-node', '.ez-tree-navigate', $parentNode);
+        $element = $this->findWithWait(".ez-tree-node[title='$text']", $parentNode);
         if (!$element) {
             throw new \Exception("The tree node '$text' was not found");
         }
