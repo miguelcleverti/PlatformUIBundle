@@ -69,7 +69,8 @@ class ContentActions extends PlatformUI
      */
     public function confirmRemoval()
     {
-        $this->clickElementByText('Confirm', '.ez-confirmbox-confirm');
+        $confirmButton = $this->findWithWait('.ez-confirmbox-confirm');
+        $confirmButton->click();
     }
 
     /**
@@ -78,7 +79,8 @@ class ContentActions extends PlatformUI
      */
     public function cancelRemoval()
     {
-        $this->clickElementByText('Cancel', '.ez-confirmbox-cancel');
+        $cancelButton = $this->findWithWait('.ez-confirmbox-cancel');
+        $cancelButton->click();
     }
 
     /**
@@ -86,10 +88,7 @@ class ContentActions extends PlatformUI
      */
     public function iSeeConfirmationBox()
     {
-        $element = $this->getElementByText(
-            'Are you sure you want to send this content to trash?',
-            '.ez-confirmbox-title'
-        );
+        $element = $this->findWithWait('.ez-confirmbox-title');
         if (!$element) {
             throw new \Exception('Confirmation box not found');
         }
@@ -100,7 +99,7 @@ class ContentActions extends PlatformUI
      */
     public function iSeeConfirmation()
     {
-        $element = $this->getElementByText('Confirm', '.ez-confirmbox-confirm');
+        $element = $this->findWithWait('.ez-confirmbox-confirm');
         if (!$element) {
             throw new \Exception('Confirmation button not found');
         }
@@ -111,7 +110,7 @@ class ContentActions extends PlatformUI
      */
     public function iSeeCancel()
     {
-        $element = $this->getElementByText('Cancel', '.ez-confirmbox-cancel');
+        $element = $this->findWithWait('.ez-confirmbox-cancel');
         if (!$element) {
             throw new \Exception('Cancel button not found');
         }
