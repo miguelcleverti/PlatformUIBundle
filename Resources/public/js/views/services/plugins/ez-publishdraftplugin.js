@@ -55,7 +55,8 @@ YUI.add('ez-publishdraftplugin', function (Y) {
                     identifier: notificationIdentifier,
                     text: 'Publishing the content',
                     state: 'started',
-                    timeout: 5,
+                    timeout: 10,
+                    status: 'publish-success',
                 },
             });
 

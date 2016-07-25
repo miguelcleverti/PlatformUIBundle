@@ -14,7 +14,6 @@ use Behat\Mink\WebAssert;
 
 class Fields extends PlatformUI
 {
-    const NOTIFICATION_CONTENT_PUBLISHED = 'Content has been published';
     const NOTIFICATION_PUBLISH_ERROR = 'An error occured while publishing the draft';
 
     protected function getFieldIdentCss($identifier, $contentId = '')
@@ -186,7 +185,11 @@ class Fields extends PlatformUI
      */
     public function contentIsPublished()
     {
-        $this->iSeeNotification(self::NOTIFICATION_CONTENT_PUBLISHED);
+        $notification = $this->findWithWait('div[notification-status="publish-success"]');
+        if (!$notification) {
+            // @TODO improve exception message
+            throw new Exception('The notification was not shown');
+        }
     }
 
     /**
